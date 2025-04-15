@@ -1,0 +1,427 @@
+#addpatient
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Patient</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="background-image-add_patient">
+<div class="container">
+    <h2>Add Patient Details</h2>
+    <p><a href="view_patients.jsp">View Patients</a> | <a href="logout.jsp">Logout</a></p>
+
+    <form action="add-patient" method="post">
+        <label>Name:</label>
+        <input type="text" name="name" required>
+
+        <label>Age:</label>
+        <input type="number" name="age" required>
+
+        <label>Gender:</label>
+        <select name="gender">
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+        </select>
+
+        <label>Doctor Name:</label>
+        <input type="text" name="doctor" required>
+
+        <input type="submit" value="Add Patient">
+    </form>
+
+    <% if (request.getParameter("success") != null) { %>
+        <p class="success">Patient added successfully!</p>
+    <% } %>
+</div>
+</body>
+</html>
+
+
+
+
+#Patient.java
+package com.example.model;
+
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "patient")
+public class Patient {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    private String name;
+    private int age;
+    private String gender;
+    private String doctor;
+
+    // Getters and Setters
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getDoctor() {
+        return doctor;
+    }
+
+    public void setDoctor(String doctor) {
+        this.doctor = doctor;
+    }
+}
+
+
+#login.jsp
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Login</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <style>
+        /* General Page Styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(270deg, #ff7e5f, #feb47b, #6a11cb, #2575fc);
+            background-size: 800% 800%;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            animation: moveGradient 15s ease infinite;
+        }
+
+        /* Keyframes for moving gradient */
+        @keyframes moveGradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* Form Container Styling */
+        .form-container {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        /* Label Styling */
+        label {
+            font-weight: bold;
+            color: #333;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        /* Input Fields Styling */
+        input[type="text"], input[type="number"], input[type="tel"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* Interactive Focus Effect */
+        input[type="text"]:focus, input[type="number"]:focus, input[type="tel"]:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+            outline: none;
+        }
+
+        /* Submit Button Styling */
+        input[type="submit"] {
+            width: 100%;
+            padding: 12px 20px;
+            background-color: #3498db;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        /* Submit Button Hover & Active Effect */
+        input[type="submit"]:hover {
+            background-color: #2980b9;
+        }
+
+        input[type="submit"]:active {
+            transform: scale(0.98);
+        }
+
+        /* Responsive Design for Mobile */
+        @media (max-width: 600px) {
+            .form-container {
+                padding: 20px;
+                width: 90%;
+            }
+
+            input[type="submit"] {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body class="background-image">
+<div class="login-container">
+    <h1 style="color: #32CD32;">Alpha Hospital</h1>
+
+    <h2>Login</h2>
+    <form action="login" method="post">
+        <label>Username:</label>
+        <input type="text" name="username" required><br>
+
+        <label>Password:</label>
+        <input type="password" name="password" required><br>
+
+        <input type="submit" value="Login">
+    </form>
+
+    <p><a href="register.jsp">Create new account</a></p>
+
+    <% if (request.getParameter("error") != null) { %>
+        <p class="error">Invalid username or password.</p>
+    <% } %>
+</div>
+
+</body>
+</html>
+
+
+#User.java
+package com.example.model;
+
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "user")
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @Column(nullable = false, unique = true)
+    private String username;
+
+    @Column(nullable = false)
+    private String password;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
+
+    // Getters and Setters
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+}
+
+
+#AddPatientServlet
+package com.example.servlet;
+
+import com.example.model.Patient;
+import com.example.util.HibernateUtil;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.*;
+
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
+import java.io.IOException;
+
+@WebServlet("/add-patient")
+public class AddPatientServlet extends HttpServlet {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        String name = request.getParameter("name");
+        int age = Integer.parseInt(request.getParameter("age"));
+        String gender = request.getParameter("gender");
+        String doctor = request.getParameter("doctor");
+
+        Patient patient = new Patient();
+        patient.setName(name);
+        patient.setAge(age);
+        patient.setGender(gender);
+        patient.setDoctor(doctor);
+
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+        session.save(patient);
+        tx.commit();
+        session.close();
+
+        // Redirect to patient list instead of form
+        response.sendRedirect("view_patients.jsp");
+    }
+}
+
+
+#LoginUserServlet.java
+package com.example.servlet;
+
+import com.example.model.User;
+import com.example.util.HibernateUtil;
+import com.example.util.PasswordUtil;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.*;
+
+import org.hibernate.Session;
+import org.hibernate.query.Query;
+
+import java.io.IOException;
+
+@WebServlet("/login")
+public class LoginUserServlet extends HttpServlet {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Query<User> query = session.createQuery("FROM User WHERE username = :username", User.class);
+        query.setParameter("username", username);
+        User user = query.uniqueResult();
+        session.close();
+
+        if (user != null && PasswordUtil.checkPassword(password, user.getPassword())) {
+            HttpSession httpSession = request.getSession();
+            httpSession.setAttribute("user", user);
+            response.sendRedirect("add_patient.jsp");
+        } else {
+            response.sendRedirect("login.jsp?error=true");
+        }
+    }
+}
+
+
+
+#RegisterUserServlet
+package com.example.servlet;
+
+import com.example.model.User;
+import com.example.model.Role;
+import com.example.util.HibernateUtil;
+import com.example.util.PasswordUtil;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.*;
+
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
+import java.io.IOException;
+
+@WebServlet("/register")
+public class RegisterUserServlet extends HttpServlet {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        String roleParam = request.getParameter("role");
+
+        // Hash the password
+        String hashedPassword = PasswordUtil.hashPassword(password);
+
+        // Convert role string to Role enum
+        Role role = Role.valueOf(roleParam.toUpperCase());
+
+        User user = new User();
+        user.setUsername(username);
+        user.setPassword(hashedPassword);
+        user.setRole(role);
+
+        // Save to DB
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+        session.save(user);
+        tx.commit();
+        session.close();
+
+        response.sendRedirect("login.jsp"); // Go to login page after successful registration
+    }
+}
